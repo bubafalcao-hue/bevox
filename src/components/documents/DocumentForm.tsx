@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-// 1. Esquema de Validação Zod
+// 1. Esquema de Validação Zod (Com proteção para campos vazios)
 const documentSchema = z.object({
   titulo: z.string().min(1, "O título é obrigatório"),
   categoria: z.string().min(1, "A categoria é obrigatória"),
@@ -14,7 +14,8 @@ const documentSchema = z.object({
   dataVencimento: z.string().min(1, "Data de vencimento obrigatória"),
   alertas: z.string().optional(),
 }).refine((data) => {
-  // Garante que o vencimento é posterior à emissão
+  // Só compara as datas se o utilizador tiver preenchido ambas
+  if (!data.dataEmissao || !data.dataVencimento) return true;
   return new Date(data.dataVencimento) > new Date(data.dataEmissao);
 }, {
   message: "O vencimento deve ser posterior à emissão",
@@ -26,15 +27,23 @@ type DocumentFormValues = z.infer<typeof documentSchema>;
 export default function DocumentForm() {
   const router = useRouter();
   
+  // 2. Configuração do formulário com valores iniciais vazios
   const { register, handleSubmit, formState: { errors } } = useForm<DocumentFormValues>({
     resolver: zodResolver(documentSchema),
+    defaultValues: {
+      titulo: "",
+      categoria: "",
+      cdd: "",
+      dataEmissao: "",
+      dataVencimento: "",
+      alertas: "",
+    }
   });
 
-  // 2. Simulação de envio
   const onSubmit = (data: DocumentFormValues) => {
     console.log("Dados salvos:", data);
-    alert("Documento salvo com sucesso!"); // Simula o sucesso
-    router.push("/documents"); // Redireciona de volta
+    alert("Documento salvo com sucesso!"); 
+    router.push("/documents"); 
   };
 
   const handleCancel = () => {
