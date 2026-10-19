@@ -24,3 +24,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Tokens do BEVOX (dashboard) — aditivos, não alteram o login. */
+@theme {
+  --color-navy-950: #070f26;
+  --color-navy-900: #0b1736;
+  --color-navy-800: #14224f;
+  --color-surface: #f2f5fa;
+  --color-line: #e4e8f1;
+}
