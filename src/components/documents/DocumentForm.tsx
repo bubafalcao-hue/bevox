@@ -43,11 +43,11 @@ export default function DocumentForm() {
   const onSubmit = (data: DocumentFormValues) => {
     console.log("Dados salvos:", data);
     alert("Documento salvo com sucesso!"); 
-    router.push("/documents"); 
+    router.push("/documentos"); 
   };
 
   const handleCancel = () => {
-    router.push("/documents");
+    router.push("/documentos");
   };
 
   return (
